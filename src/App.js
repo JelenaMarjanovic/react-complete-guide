@@ -1,90 +1,88 @@
-import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import React, { Component } from "react";
+import "./App.css";
+import Person from "./Person/Person";
 
 class App extends Component {
-  state = {
-    persons: [
-      { id: 'sadsf', name: 'Max', age: 28 },
-      { id: 'qwerq', name: 'Manu', age: 29 },
-      { id: 'zxvcc', name: 'Stephanie', age: 26 }
-    ],
-    showPersons: false
-  };
+	state = {
+		persons: [
+			{ id: "sadsf", name: "Max", age: 28 },
+			{ id: "qwerq", name: "Manu", age: 29 },
+			{ id: "zxvcc", name: "Stephanie", age: 26 }
+		],
+		showPersons: false
+	};
 
-  nameChangedHandler = (event, id) => {
-    const personIndex = this.state.persons.findIndex(
-      person => person.id === id
-    );
+	nameChangedHandler = (event, id) => {
+		const personIndex = this.state.persons.findIndex(
+			person => person.id === id
+		);
 
-    // const person = this.state.persons.person[personIndex];
+		const person = {
+			...this.state.persons[personIndex]
+		};
 
-    // const person = Object.assign({}, this.state.persons[personIndex]);
+		person.name = event.target.value;
 
-    const person = {
-      ...this.state.persons[personIndex]
-    };
+		const persons = [...this.state.persons];
 
-    person.name = event.target.value;
+		persons[personIndex] = person;
 
-    const persons = [...this.state.persons];
+		this.setState({ persons: persons });
+	};
 
-    persons[personIndex] = person;
+	deletePersonHandler = personIndex => {
+		const persons = [...this.state.persons];
 
-    this.setState({ persons: persons });
-  };
+		persons.splice(personIndex, 1);
 
-  deletePersonHandler = personIndex => {
-    // const persons = this.state.persons.slice();
-    const persons = [...this.state.persons];
+		this.setState({ persons: persons });
+	};
 
-    persons.splice(personIndex, 1);
+	togglePersonsHandler = () => {
+		const doesShow = this.state.showPersons;
 
-    this.setState({ persons: persons });
-  };
+		this.setState({ showPersons: !doesShow });
+	};
 
-  togglePersonsHandler = () => {
-    const doesShow = this.state.showPersons;
+	render() {
+		const style = {
+			backgroundColor: "green",
+			color: "white",
+			font: "inherit",
+			border: "1px solid blue",
+			padding: "8px",
+			cursor: "pointer"
+		};
 
-    this.setState({ showPersons: !doesShow });
-  };
+		let persons = null;
 
-  render() {
-    const style = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
+		if (this.state.showPersons) {
+			persons = (
+				<div>
+					{this.state.persons.map((person, index) => (
+						<Person
+							click={() => this.deletePersonHandler(index)}
+							changed={event => this.nameChangedHandler(event, person.id)}
+							name={person.name}
+							age={person.age}
+							key={person.id}
+						/>
+					))}
+				</div>
+			);
 
-    let persons = null;
+			style.backgroundColor = "red";
+		}
 
-    if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => (
-            <Person
-              click={() => this.deletePersonHandler(index)}
-              changed={event => this.nameChangedHandler(event, person.id)}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-            />
-          ))}
-        </div>
-      );
-    }
-
-    return (
-      <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <button style={style} onClick={this.togglePersonsHandler}>
-          Toggle Persons
-        </button>
-        {persons}
-      </div>
-    );
-  }
+		return (
+			<div className="App">
+				<h1>Hi, I'm a React App</h1>
+				<button style={style} onClick={this.togglePersonsHandler}>
+					Toggle Persons
+				</button>
+				{persons}
+			</div>
+		);
+	}
 }
 export default App;
