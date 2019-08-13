@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { tsPropertySignature } from '@babel/types';
 
 class ErrorBoundary extends Component {
   state = {
